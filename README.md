@@ -97,15 +97,6 @@ NexusChat/
 
 5. Run the application on an Android emulator or compatible device.
 
-## Logo
-
-The README logo is loaded from:
-
-```text
-assets/nexus-chat-logo.png
-```
-
-Add your logo image at that location to display it at the top of this README.
 
 ## Security
 
