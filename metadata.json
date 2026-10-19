@@ -1,0 +1,6 @@
+{
+  "name": "Nexus Chat",
+  "description": "Real-time chat and group messaging with Firebase Authentication and Firestore live synchronization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

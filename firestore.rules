@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId;
+
+      // Presence Subcollection
+      match /status/{docId} {
+        allow read: if isSignedIn();
+        allow write: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // Conversations Collection
+    match /conversations/{conversationId} {
+      allow read, write: if isSignedIn();
+
+      // Messages Subcollection
+      match /messages/{messageId} {
+        allow read, write: if isSignedIn();
+      }
+
+      // Typing Indicator Subcollection
+      match /typing/{userId} {
+        allow read, write: if isSignedIn();
+      }
+    }
+  }
+}

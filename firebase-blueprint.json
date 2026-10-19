@@ -1,0 +1,102 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with display name, username, and metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase user ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "username": { "type": "string", "description": "Unique username handle" },
+        "usernameNormalized": { "type": "string", "description": "Normalized lowercase username" },
+        "photoUrl": { "type": "string", "description": "Profile picture URL or preset" },
+        "bio": { "type": "string", "description": "User status bio" },
+        "phoneNumber": { "type": "string", "description": "Phone number" },
+        "isEmailVerified": { "type": "boolean", "description": "Email verified flag" },
+        "createdAt": { "type": "integer", "description": "Creation timestamp in millis" },
+        "updatedAt": { "type": "integer", "description": "Last update timestamp in millis" }
+      },
+      "required": ["uid"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Direct or group chat conversation room",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Conversation ID" },
+        "title": { "type": "string", "description": "Conversation title or peer name" },
+        "isGroup": { "type": "boolean", "description": "Whether conversation is a group" },
+        "memberUids": { "type": "array", "description": "List of participant user IDs" },
+        "groupAdminUids": { "type": "array", "description": "List of group admin user IDs" },
+        "lastMessageText": { "type": "string", "description": "Last message snippet" },
+        "lastMessageTimestamp": { "type": "integer", "description": "Last message timestamp" },
+        "photoUrl": { "type": "string", "description": "Group or room avatar URL" },
+        "category": { "type": "string", "description": "Conversation category tag" }
+      },
+      "required": ["id", "memberUids"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message item inside a conversation",
+      "type": "object",
+      "properties": {
+        "senderUid": { "type": "string", "description": "UID of the message sender" },
+        "senderName": { "type": "string", "description": "Display name of sender" },
+        "text": { "type": "string", "description": "Plaintext message if unencrypted" },
+        "ciphertext": { "type": "string", "description": "AES-256 encrypted payload" },
+        "iv": { "type": "string", "description": "Encryption initialization vector" },
+        "timestamp": { "type": "integer", "description": "Message timestamp" },
+        "isEncrypted": { "type": "boolean", "description": "Whether payload is encrypted" },
+        "attachmentId": { "type": "string", "description": "Attachment ID" },
+        "attachmentType": { "type": "string", "description": "Attachment type" },
+        "attachmentFileName": { "type": "string", "description": "Attachment file name" },
+        "attachmentFileSize": { "type": "integer", "description": "Attachment size" },
+        "attachmentUrl": { "type": "string", "description": "Remote download URL" }
+      },
+      "required": ["senderUid", "timestamp"]
+    },
+    "UserPresence": {
+      "title": "UserPresence",
+      "description": "User online presence status",
+      "type": "object",
+      "properties": {
+        "isOnline": { "type": "boolean", "description": "Online state" },
+        "lastSeen": { "type": "integer", "description": "Last seen timestamp" }
+      },
+      "required": ["isOnline"]
+    },
+    "TypingStatus": {
+      "title": "TypingStatus",
+      "description": "Realtime typing status indicator per conversation",
+      "type": "object",
+      "properties": {
+        "isTyping": { "type": "boolean", "description": "Whether user is currently typing" },
+        "updatedAt": { "type": "integer", "description": "Last status update timestamp" }
+      },
+      "required": ["isTyping"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile collection"
+    },
+    "/users/{userId}/status/{docId}": {
+      "schema": "UserPresence",
+      "description": "User online presence document"
+    },
+    "/conversations/{conversationId}": {
+      "schema": "Conversation",
+      "description": "Conversations collection"
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Subcollection of messages inside a conversation"
+    },
+    "/conversations/{conversationId}/typing/{userId}": {
+      "schema": "TypingStatus",
+      "description": "Subcollection of user typing statuses in a conversation"
+    }
+  }
+}
